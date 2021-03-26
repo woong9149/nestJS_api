@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Controller, Module } from '@nestjs/common';
 import { MoviesController } from './movies/movies.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
+import { MoviesService } from './movies/movies.service';
 
 @Module({
   imports: [
@@ -19,5 +20,7 @@ import { UserModule } from './user/user.module';
     }),
     UserModule,
   ],
+  controllers: [MoviesController],
+  providers: [MoviesService],
 })
 export class AppModule {}
