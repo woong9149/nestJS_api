@@ -9,7 +9,8 @@ export class UserService {
 	constructor(@InjectRepository(User) private readonly userRepository: Repository<User>){}
 
 
-async findOne(id: string): Promise<User> {
+	findOne(id: string): Promise<User> {
 	return this.userRepository.findOne(id);
 }
+
 }
