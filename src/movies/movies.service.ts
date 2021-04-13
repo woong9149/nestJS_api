@@ -1,14 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 
 @Injectable()
 export class MoviesService {
+	constructor(
+		@InjectRepository(Movie) private movieRepository: Repository<Movie>,
+	) {
+		this.movieRepository = movieRepository;
+	}
 	private movies: Movie[] = [];
 
-	getAll(): Movie [] {
-		return this.movies;//진짜 데이터베이스라면 쿼리가 올 자리
+	getAll(): Promise<Movie[]> {
+		return this.movieRepository.find();
 	}
 
 	getOne(id: number): Movie {
@@ -24,11 +31,14 @@ export class MoviesService {
 		this.movies = this.movies.filter(movie => movie.id !== +id);
 	}
 
-	create(movieData: CreateMovieDto) {
-		this.movies.push({
-			id: this.movies.length + 1,
-			...movieData,
-		})
+	// create(movieData: CreateMovieDto) {
+	// 	this.movies.push({
+	// 		id: this.movies.length + 1,
+	// 		...movieData,
+	// 	})
+	// }
+	async create(movieData: CreateMovieDto): Promise<void> {
+		await this.movieRepository.save(movieData);
 	}
 
 	update(id: number, updateData: UpdateMovieDto) {

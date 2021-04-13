@@ -9,8 +9,8 @@ export class MoviesController {
 	constructor(private readonly moviesService: MoviesService){} // 이 부분이 express.js 처럼 수동으로 import 하지않고 NestJS에서 기본적으로 쓰는 방법
 
 	@Get()
-	getAll(): Movie [] {
-		return this.moviesService.getAll();
+	async getAll(): Promise<Movie[]> {
+		return await this.moviesService.getAll();
 	}
 
 	// @Get('search')
@@ -24,8 +24,9 @@ export class MoviesController {
 	}
 
 	@Post()
-	create(@Body() movieData: CreateMovieDto) {
-		return this.moviesService.create(movieData);
+	async create(@Body() movieData: CreateMovieDto) {
+		await this.moviesService.create(movieData);
+		return 'success';
 	}
 
 	@Delete('/:id')
